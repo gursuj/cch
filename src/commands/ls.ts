@@ -43,8 +43,8 @@ export async function lsCommand(n: number, useMux: boolean, useGroup: boolean): 
   }
 
   const hint = useGroup
-    ? `↑↓/jk 导航 · 数字跳转 · Enter 恢复 · Esc 取消`
-    : `↑↓/jk 导航 · 数字跳转 · Enter 恢复 · Esc 取消 · \x1b[2mch ls -g 按项目分组\x1b[0m`;
+    ? `↑↓/jk navigate · number jump · Enter resume · Esc cancel`
+    : `↑↓/jk navigate · number jump · Enter resume · Esc cancel · \x1b[2mch ls -g group by project\x1b[0m`;
 
   const selected = await interactiveSelect(items, { hint });
 

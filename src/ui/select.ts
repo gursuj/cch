@@ -72,7 +72,7 @@ export function interactiveSelect(
   if (!items.length) return Promise.resolve(useDelete ? { value: -1, action: "cancel" as const } : -1);
 
   const maxItems = opts.maxItems ?? Math.max(Math.min(items.length, getRows(process.stdout) - 6), 5);
-  const defaultHint = "↑↓/jk 导航 · 数字跳转 · / 搜索 · Enter 确认 · Esc 取消";
+  const defaultHint = "↑↓/jk navigate · number jump · / search · Enter confirm · Esc cancel";
   const hint = opts.hint ?? defaultHint;
   let inputBuf = "";
   let searchMode = false;
@@ -152,7 +152,7 @@ export function interactiveSelect(
         return `${pc.gray(S_BAR_END)}  ${pc.dim(msg)}`;
       }
       if (this.state === "cancel") {
-        return `${pc.gray(S_BAR_END)}  ${pc.strikethrough(pc.dim("已取消"))}`;
+        return `${pc.gray(S_BAR_END)}  ${pc.strikethrough(pc.dim("cancelled"))}`;
       }
 
       lines.push(`${pc.gray(S_BAR)}`);

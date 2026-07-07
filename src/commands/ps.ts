@@ -30,7 +30,7 @@ export async function psCommand(): Promise<void> {
     const items = labels.map((label, i) => ({ label, value: i }));
 
     const selected = await interactiveSelect(items, {
-      hint: "↑↓/jk 导航 · Enter 连接 · dd 终止 · Esc 取消",
+      hint: "↑↓/jk navigate · Enter attach · dd kill · Esc cancel",
       initialCursor: cursorPos,
       deleteKey: true,
     });

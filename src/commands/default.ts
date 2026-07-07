@@ -18,7 +18,7 @@ export async function defaultCommand(query: string): Promise<void> {
   const labels = formatSessionLines(matched);
   const items = labels.map((label, i) => ({ label, value: i }));
 
-  const selected = await interactiveSelect(items, { hint: `↑↓/jk 导航 · 数字跳转 · Enter 恢复会话 · Esc 取消` });
+  const selected = await interactiveSelect(items, { hint: `↑↓/jk navigate · number jump · Enter resume · Esc cancel` });
   if (selected >= 0) {
     const s = matched[selected];
     await resumeInSession(s.sessionId, s.cwd);
