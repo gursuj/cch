@@ -136,7 +136,7 @@ export function parseJsonl(filePath: string, knownMtime?: number): SessionInfo |
       timestamp = new Date(mtime).toISOString();
     }
 
-    const project = decodePath(filePath.split("/").slice(-2, -1)[0]).split("/").pop() || (cwd ? basename(cwd) : "");
+    const project = decodePath(filePath.split(/[\\/]/).slice(-2, -1)[0]).split(/[\\/]/).pop() || (cwd ? basename(cwd) : "");
     return { sessionId, filePath, project, cwd, gitBranch, timestamp, firstMsg, userMsgs, mtime };
   } catch {
     return null;
