@@ -1,6 +1,7 @@
 import { openSync, readSync, closeSync, statSync, readdirSync } from "node:fs";
 import { join, basename } from "node:path";
 import { homedir } from "node:os";
+import { getConfig } from "../config/index.js";
 
 const PROJECTS_DIR = join(process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".claude"), "projects");
 
@@ -124,6 +125,10 @@ export function parseJsonl(filePath: string, knownMtime?: number): SessionInfo |
     ) {
       return null;
     }
+
+    // User-defined automated sessions (config.excludeFirstMsg)
+    const prefixes = getConfig().excludeFirstMsg.map((p) => p.trim().toLowerCase()).filter(Boolean);
+    if (prefixes.some((p) => noise.startsWith(p))) return null;
 
     // Check for custom title (user renamed the conversation)
     const customTitle = extractCustomTitle(filePath);

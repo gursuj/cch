@@ -13,6 +13,8 @@ export interface CchConfig {
   claudeArgs: string[];
   historyLimit: number;
   excludeDirs: string[];
+  /** Case-insensitive prefixes of a session's first message; matches are hidden (automated sessions). */
+  excludeFirstMsg: string[];
 }
 
 export interface SessionMeta {
@@ -27,6 +29,7 @@ const DEFAULT_CONFIG: CchConfig = {
   claudeArgs: [],
   historyLimit: 100,
   excludeDirs: ["claude-mem"],
+  excludeFirstMsg: [],
 };
 
 function ensureDir(): void {
@@ -60,7 +63,7 @@ export function getConfig(): CchConfig {
 
 export function setConfig(key: string, value: string): void {
   const config = readJson<Record<string, unknown>>(CONFIG_FILE, {});
-  if (key === "claudeArgs" || key === "excludeDirs") {
+  if (key === "claudeArgs" || key === "excludeDirs" || key === "excludeFirstMsg") {
     config[key] = value.split(",").map((s) => s.trim());
   } else if (key === "historyLimit") {
     config[key] = parseInt(value, 10);
@@ -69,6 +72,17 @@ export function setConfig(key: string, value: string): void {
   }
   writeJson(CONFIG_FILE, config);
   configCache = null; // 写入后清除缓存
+}
+
+/** Append (or with remove=true, delete) one entry of a list-type config key. Avoids comma-splitting. */
+export function editConfigList(key: string, value: string, remove = false): string[] {
+  const config = readJson<Record<string, unknown>>(CONFIG_FILE, {});
+  const current = Array.isArray(config[key]) ? (config[key] as string[]) : [...((DEFAULT_CONFIG as unknown as Record<string, string[]>)[key] ?? [])];
+  const next = remove ? current.filter((v) => v !== value) : current.includes(value) ? current : [...current, value];
+  config[key] = next;
+  writeJson(CONFIG_FILE, config);
+  configCache = null;
+  return next;
 }
 
 export function getSessionsMeta(): Record<string, SessionMeta> {

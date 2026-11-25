@@ -59,9 +59,9 @@ program
   .action((id) => resumeCommand(id));
 
 program
-  .command("config [key] [value]")
-  .description("Show or set configuration")
-  .action((key, value) => configCommand(key, value));
+  .command("config [key] [value] [extra]")
+  .description("Show or set configuration (add|rm <listKey> <value> edits a list)")
+  .action((key, value, extra) => configCommand(key, value, extra));
 
 program
   .command("setup")
